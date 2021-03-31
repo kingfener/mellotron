@@ -118,8 +118,7 @@ class SMAttention(nn.Module):
                                             attention_location_kernel_size,
                                             attention_dim)
         self.score_mask_value = -float("inf")
-        noise_std = 1
-        self.noise_std = noise_std
+        self.sigmoid_noise = 2
 
     def get_alignment_energies(self, query, processed_memory,
                                attention_weights_cat):
@@ -155,15 +154,18 @@ class SMAttention(nn.Module):
         processed_memory: processed encoder outputs
         attention_weights_cat: previous and cummulative attention weights
         mask: binary mask for padded data
+
         # 
         attention_hidden_state:: - **h_1** of shape `(batch, hidden_size)
         self.attention_context, self.attention_weights = 
             self.attention_layer(
         self.attention_hidden, self.memory, self.processed_memory,attention_weights_cat, self.mask, attention_weights)
+
         # 
         attention_weights_cat = torch.cat(
             (self.attention_weights.unsqueeze(1),self.attention_weights_cum.unsqueeze(1)), dim=1)
         """
+
         # get_alignment_energies(self, query, processed_memory, attention_weights_cat):
         # PARAMS
         # ------
@@ -180,15 +182,17 @@ class SMAttention(nn.Module):
                 attention_hidden_state, processed_memory, attention_weights_cat)
             if mask is not None:
                 alignment.data.masked_fill_(mask, self.score_mask_value)
-            if self.noise_std > 0:
-                alignment = alignment + alignment*self.add_gaussian_noise(alignment, self.noise_std) 
+            
+            if self.sigmoid_noise > 0:
+                if 0:
+                    alignment = alignment + self.add_gaussian_noise(alignment) 
+                else:
+                    alignment = alignment + self.sigmoid_noise*self.add_gaussian_noise(alignment) 
             # p_choose_i : attention_weights : p_sample
             if mode=='soft':
                 # soft attention .  
                 # attention_weights = F.softmax(alignment, dim=1)
                 attention_weights = torch.sigmoid(alignment)
-                # print('\n\t-->attention_weights.shape０=',attention_weights.shape)
-                # print('\n\t-->attention_weights=０',attention_weights)
             else: # hard attention 
                 y = torch.ones(alignment.shape,dtype=alignment.dtype)
                 attention_weights = torch.where(alignment > 0,alignment,y)
@@ -216,23 +220,21 @@ class SMAttention(nn.Module):
 
         return attention_context, attention_weights
 
-    def add_gaussian_noise(self, xs, std):
+    def add_gaussian_noise(self, xs, std=1.0):
         """Add Gaussian noise to encourage discreteness."""
         noise = xs.new_zeros(xs.size()).normal_(std=std)
-        return xs + noise
+        return noise
 
 def monotonic_stepwise_attention(p_choose_i, previous_attention, mode):
     # p_choose_i, previous_alignments, previous_score: [batch_size, memory_size]
     # p_choose_i: probability to keep attended to the last attended entry i
     # p_choose_i : B, T
-
     if mode == "soft":
         # pad = tf.zeros([tf.shape(p_choose_i)[0], 1], dtype=p_choose_i.dtype)
         pad = torch.zeros((p_choose_i.shape[0], 1), dtype=p_choose_i.dtype).to(p_choose_i.device)
         # attention = previous_attention * p_choose_i + tf.concat([pad, previous_attention[:, :-1] * (1.0 - p_choose_i[:, :-1])], axis=1)
         attention = previous_attention * p_choose_i + torch.cat((pad, previous_attention[:, :-1] * (torch.ones_like(p_choose_i[:, :-1]) - p_choose_i[:, :-1])), dim=1)
         # attention = previous_attention * p_choose_i
-    
     elif mode == "hard":
         # Given that previous_alignments is one_hot
         # move_next_mask = tf.concat([tf.zeros_like(previous_attention[:, :1]), previous_attention[:, :-1]], axis=1)
@@ -245,20 +247,6 @@ def monotonic_stepwise_attention(p_choose_i, previous_attention, mode):
         raise ValueError("mode must be 'parallel', or 'hard'.")
     return attention
 
-    # SMA
-    if 0:
-        batch_size = attention_weights.shape[0]
-        klen = attention_weights.shape[1] # encoder 的数目。
-        # Compute probability sampling matrix P
-        alpha = []
-        # Compute recurrence relation solution along mel frame domain
-        for i in range(klen):
-            p_sample_i = p_sample[:, :, i:i + 1]
-            pad = torch.zeros([batch_size, 1, 1], dtype=aw_prev.dtype).to(aw_prev.device)
-            aw_prev = aw_prev * p_sample_i + torch.cat((pad, aw_prev[:, :-1, :] * (1.0 - p_sample_i[:, :-1, :])), dim=1)
-            alpha.append(aw_prev)
-        attention_weights = torch.cat(alpha, dim=-1) if klen > 1 else alpha[-1] # [batch*n_head, qlen, klen]
-        assert not torch.isnan(attention_weights).any(), "NaN detected in alpha."
 
 class Prenet(nn.Module):
     def __init__(self, in_dim, sizes):
