@@ -11,7 +11,9 @@
 
 
 
+# snap install 
 
+    sudo snap install picgo_2.2.2_amd64.snap --dangerous
 
 
 
