@@ -99,7 +99,7 @@ class Attention(nn.Module):
         return attention_context, attention_weights
 
 class SMAttention(nn.Module):
-    '''   '''
+    '''  step wise monotonic attention '''
     def __init__(self, attention_rnn_dim, embedding_dim, attention_dim,
                  attention_location_n_filters, attention_location_kernel_size):
         super(Attention, self).__init__()
