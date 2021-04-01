@@ -1,3 +1,4 @@
+# coding=utf-8
 import os
 import time
 import argparse
@@ -14,7 +15,7 @@ from model import load_model
 from data_utils import TextMelLoader, TextMelCollate
 from loss_function import Tacotron2Loss
 from logger import Tacotron2Logger
-from hparams import create_hparams
+
 
 
 def reduce_tensor(tensor, n_gpus):
@@ -252,6 +253,8 @@ def train(output_directory, log_directory, checkpoint_path, warm_start, n_gpus,
 
 
 if __name__ == '__main__':
+    from config.hparams_LJ import create_hparams
+    dataTag = '_LJ'
     parser = argparse.ArgumentParser()
     parser.add_argument('-o', '--output_directory', type=str,
                         help='directory to save checkpoints')
@@ -273,6 +276,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
     hparams = create_hparams(args.hparams)
 
+    # arg preprocess
+    args.output_directory = args.output_directory+dataTag
+
+    if args.n_gpus>1:
+        hparams.distributed_run = True
+    else:
+        hparams.distributed_run = False
+
+
     torch.backends.cudnn.enabled = hparams.cudnn_enabled
     torch.backends.cudnn.benchmark = hparams.cudnn_benchmark
 
@@ -281,6 +293,11 @@ if __name__ == '__main__':
     print("Distributed Run:", hparams.distributed_run)
     print("cuDNN Enabled:", hparams.cudnn_enabled)
     print("cuDNN Benchmark:", hparams.cudnn_benchmark)
+    print("output_directory:", args.output_directory)
+
+
+
+
 
     train(args.output_directory, args.log_directory, args.checkpoint_path,
           args.warm_start, args.n_gpus, args.rank, args.group_name, hparams)

@@ -38,3 +38,14 @@ def to_gpu(x):
     if torch.cuda.is_available():
         x = x.cuda(non_blocking=True)
     return torch.autograd.Variable(x)
+
+
+
+if __name__=='__main__':
+
+
+    import tensorflow as tf
+
+    from config.hparams_LJ import create_hparams
+    create_hparams()
+    pass

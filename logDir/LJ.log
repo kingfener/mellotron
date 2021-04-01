@@ -1,0 +1,49 @@
+WARNING:root:Limited tf.compat.v2.summary API due to missing TensorBoard installation.
+WARNING:tensorflow:
+The TensorFlow contrib module will not be included in TensorFlow 2.0.
+For more information, please see:
+  * https://github.com/tensorflow/community/blob/master/rfcs/20180907-contrib-sunset.md
+  * https://github.com/tensorflow/addons
+  * https://github.com/tensorflow/io (for I/O related ops)
+If you depend on functionality not listed there, please file an issue.
+
+WARNING:tensorflow:
+The TensorFlow contrib module will not be included in TensorFlow 2.0.
+For more information, please see:
+  * https://github.com/tensorflow/community/blob/master/rfcs/20180907-contrib-sunset.md
+  * https://github.com/tensorflow/addons
+  * https://github.com/tensorflow/io (for I/O related ops)
+If you depend on functionality not listed there, please file an issue.
+
+FP16 Run: False
+Dynamic Loss Scaling: True
+Distributed Run: False
+cuDNN Enabled: True
+cuDNN Benchmark: False
+output_directory: ./outdir_LJ
+Traceback (most recent call last):
+  File "train.py", line 303, in <module>
+    args.warm_start, args.n_gpus, args.rank, args.group_name, hparams)
+  File "train.py", line 159, in train
+    model = load_model(hparams)
+  File "/media/U1T/SProject/nvidia/mellotron/model.py", line 15, in load_model
+    model = Tacotron2(hparams).cuda()
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/nn/modules/module.py", line 458, in cuda
+    return self._apply(lambda t: t.cuda(device))
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/nn/modules/module.py", line 354, in _apply
+    module._apply(fn)
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/nn/modules/module.py", line 376, in _apply
+    param_applied = fn(param)
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/nn/modules/module.py", line 458, in <lambda>
+    return self._apply(lambda t: t.cuda(device))
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/cuda/__init__.py", line 186, in _lazy_init
+    _check_driver()
+  File "/home/king/miniconda3/envs/tf115torch17/lib/python3.7/site-packages/torch/cuda/__init__.py", line 77, in _check_driver
+    of the CUDA driver.""".format(str(torch._C._cuda_getDriverVersion())))
+AssertionError: 
+The NVIDIA driver on your system is too old (found version 10010).
+Please update your GPU driver by downloading and installing a new
+version from the URL: http://www.nvidia.com/Download/index.aspx
+Alternatively, go to: https://pytorch.org to install
+a PyTorch version that has been compiled with your version
+of the CUDA driver.
