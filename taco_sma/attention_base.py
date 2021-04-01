@@ -78,6 +78,7 @@ class BahdanauAttention(nn.Module):
     def get_energies(self, query, processed_memory):
         """
         Compute the alignment energies
+        processed_memory:(batch, max_time, dim)
         """
         # Query (batch, 1, dim)
         processed_query = self.query_layer(query)

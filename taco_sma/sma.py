@@ -75,3 +75,18 @@ class StepwiseMonotonicAttention(BahdanauAttention):
         # (batch, max_time)
         self.alignment = alignment
         return alignment
+
+
+if __name__=='__main__':
+
+    import numpy as np
+    m = np.random.random((3,2))
+    mt = torch.from_numpy(m)
+    print('mt0=',mt)
+
+    # mt[:, 0:1] = 1
+    mt[:, 0] = 1
+
+
+    print('m=',m)
+    print('mt=',mt)
