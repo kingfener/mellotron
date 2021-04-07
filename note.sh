@@ -3,6 +3,8 @@
 git config --global user.name king
 git config --global user.email kingfener@gmail.com
 
+sudo git remote remove notegit 
+
 # git subtree
     ref: https://www.jianshu.com/p/d42d330bfead
     git remote add -f taco_sma git@github.com:kingfener/Attentions-in-Tacotron.git
