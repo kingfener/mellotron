@@ -25,6 +25,6 @@ pip --default-timeout=100 install --upgrade -i https://mirrors.aliyun.com/pypi/s
 git remote add -f notegit git@github.com:kingfener/note.git
 
 然后可以这样来使用git subtree命令：
-git subtree add --prefix=notegit notegit master --squash
-git subtree pull --prefix=notegit notegit master --squash
-git subtree push --prefix=notegit notegit master
+git subtree add --prefix=notegit notegit main --squash
+git subtree pull --prefix=notegit notegit main --squash
+git subtree push --prefix=notegit notegit main
