@@ -1,6 +1,7 @@
 
 
-
+git config --global user.name king
+git config --global user.email kingfener@gmail.com
 
 # git subtree
     ref: https://www.jianshu.com/p/d42d330bfead
