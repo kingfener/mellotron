@@ -19,7 +19,7 @@
 # 
 pip --default-timeout=100 install --upgrade -i https://mirrors.aliyun.com/pypi/simple tensorflow==1.15.0
 
-git remote add -f notegit https://github.com/kingfener/note.git
+git remote add -f notegit git@github.com:kingfener/note.git
 
 然后可以这样来使用git subtree命令：
 git subtree add --prefix=notegit notegit master --squash
