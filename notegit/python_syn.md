@@ -2,6 +2,8 @@
 
 
 # python inser path
+    print('sys.path=',sys.path)
+
     sys.path.append('/media/U1T/SProject/nvidia/mellotron')
     sys.path.insert(0, os.path.abspath('../mellotron'))   # ok
     sys.path.insert(0, os.path.abspath(__file__))  

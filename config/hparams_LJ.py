@@ -19,9 +19,7 @@ sys.path.insert(0, os.path.realpath(''))  # ok，
 # │   ├── LICENSE
 # │   ├── numbers.py
 # │   └── symbols.py
-
-
-print('sys.path=',sys.path)
+# print('sys.path=',sys.path)
 from text.symbols import symbols
 
 def create_hparams(hparams_string=None, verbose=False):
