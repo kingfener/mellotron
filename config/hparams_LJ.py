@@ -1,7 +1,7 @@
 import tensorflow as tf
-from text.symbols import symbols
+# from text.symbols import symbols
 
-
+symbols=['']
 def create_hparams(hparams_string=None, verbose=False):
     """Create model hyperparameters. Parse nondefault from given string."""
 
@@ -31,7 +31,7 @@ def create_hparams(hparams_string=None, verbose=False):
         cmudict_path="data/cmu_dictionary",
 
         ################################
-        # Audio Parameters             #
+        # Audio Parameters             #symbols
         ################################
         max_wav_value=32768.0,
         sampling_rate=22050,
@@ -123,3 +123,6 @@ def create_hparams(hparams_string=None, verbose=False):
         tf.compat.v1.logging.info('Final parsed hparams: %s', hparams.values())
 
     return hparams
+
+if __name__=='__main__':
+    print(tf.__version__)

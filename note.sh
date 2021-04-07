@@ -16,5 +16,12 @@
     sudo snap install picgo_2.2.2_amd64.snap --dangerous
 
 
+# 
+pip --default-timeout=100 install --upgrade -i https://mirrors.aliyun.com/pypi/simple tensorflow==1.15.0
 
+git remote add -f notegit https://github.com/kingfener/note.git
 
+然后可以这样来使用git subtree命令：
+git subtree add --prefix=notegit notegit master --squash
+git subtree pull --prefix=notegit notegit master --squash
+git subtree push --prefix=notegit notegit master
